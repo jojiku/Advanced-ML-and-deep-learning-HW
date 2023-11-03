@@ -1,0 +1,19 @@
+from sklearn.decomposition import PCA
+
+# Создайте экземпляр PCA с параметром svd_solver='full'
+pca = PCA(svd_solver='full')
+
+# Примените PCA к тренировочному набору данных
+df_train_pca = pca.fit_transform(df_train_filtered.drop('label', axis=1))
+
+# Найдите накопленные объясненные дисперсии
+explained_variance = pca.explained_variance_ratio_
+
+# Итерируйтесь по компонентам и найдите минимальное количество компонент
+cumulative_variance = 0
+min_components = 0
+for i, variance in enumerate(explained_variance):
+    cumulative_variance += variance
+    if cumulative_variance > 0.9:
+        min_components = i + 1
+        break
